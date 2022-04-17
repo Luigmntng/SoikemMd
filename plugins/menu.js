@@ -1,5 +1,6 @@
 const { default: makeWASocket, BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, downloadContentFromMessage, downloadHistory, proto, getMessage, generateWAMessageContent, prepareWAMessageMedia } = require('@adiwajshing/baileys')
 let fs = require('fs')
+let fetch = require('node-fetch')
 let path = require('path')
 let levelling = require('../lib/levelling')
 let moment = require('moment-timezone')
@@ -20,7 +21,6 @@ let tags = {
   'maker': 'MENU MAKER',
   'github': 'MENU GITHUB',
   'internet': 'INTERNET',
-  'asupan': 'ASUPAN',
   'kerang': 'MENU KERANG',
   'anime': 'MENU ANIME',
   'downloader': 'DOWNLOADER',
@@ -148,56 +148,24 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       readmore: readMore
     }
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-     const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-     templateMessage: {
-         hydratedTemplate: {
-           hydratedContentText: Abaikan < >,
-           locationMessage: { 
-           jpegThumbnail: fs.readFileSync('./media/lui.jpg') },
-           hydratedFooterText: text.trim(),
-           hydratedButtons: [{
-             urlButton: {
-               displayText: 'Official instagram🐦',
-               url: instagram
-             }
-
-           },
-             {
-             callButton: {
-               displayText: 'Nomor Owner',
-               PhoneNumber: '082146092695'
-             }
-
-           },
-               {
-             quickReplyButton: {
-               displayText: '🧒 Pembuat',
-               id: '.owner',
-             }
-
-           },
-               {
-             quickReplyButton: {
-               displayText: '😅Sumbangan',
-               id: '.donasi',
-             }
-
-           },
-           {
-             quickReplyButton: {
-               displayText: '📍 Info Owner',
-               id: '.infoowner',
-             }
-           }]
-         }
-       }
-     }), { userJid: m.sender, quoted: m });
-    //conn.reply(m.chat, text.trim(), m)
-    return await conn.relayMessage(
-         m.chat,
-         template.message,
-         { messageId: template.key.id }
-     )
+      const ftrol = {
+    key : {
+    remoteJid: 'status@broadcast',
+    participant : '0@s.whatsapp.net'
+    },
+    message: {
+    orderMessage: {
+    itemCount : 2022,
+    status: 1,
+    surface : 1,
+    message: `ERR NOT FOUND`, 
+    orderTitle: `▮Menu ▸`,
+    thumbnail: await (await fetch('https://cdn.anisearch.com/images/character/cover/full/83/83046.webp')).buffer(), //Gambarnye
+    sellerJid: '0@s.whatsapp.net' 
+    }
+    }
+    }
+     conn.send3But(m.chat, `Abaikan < >`, text.trim(), 'PEMBUAT', `.owner`, 'INFO', `.ping`, 'RUNTIME', `.runtime` m, ftrol)
   } catch (e) {
     conn.reply(m.chat, 'Maaf, menu sedang error', m)
     throw e
